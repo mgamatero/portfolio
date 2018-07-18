@@ -1,0 +1,175 @@
+Sub StarCalc_Click()
+Set objPage = Item.GetInspector.ModifiedFormPages("Planner")
+Set RankList = objPage.Controls("RankingBox")
+
+ErrorStarCalc = 100
+C = UserProperties("C Errors")
+B = UserProperties("B Errors")
+A = UserProperties("A Errors")
+P = UserProperties("P Errors")
+
+If UserProperties("Complexity") =< 0 then 
+	msgbox "Complexity must be greater than 0"
+Else
+	ErrorStarCalc = 0
+	ErrorStarCalc = (A*.5)+(B*1)+(P*.5)
+	msgbox "Error Calculation = " & ErrorStarCalc
+end if
+           
+if ErrorStarCalc = 0 then RankList.Value = "5 Stars"
+
+if (UserProperties("Complexity") > 0.1 and UserProperties("Complexity") =< 6 and ErrorStarCalc > 0 and ErrorStarCalc =< 1)then RankList.Value = "4 Stars"
+if (UserProperties("Complexity") > 0.1 and UserProperties("Complexity") =< 6 and ErrorStarCalc > 1 and ErrorStarCalc =< 2)then RankList.Value = "3 Stars"
+if (UserProperties("Complexity") > 0.1 and UserProperties("Complexity") =< 6 and ErrorStarCalc > 2 and ErrorStarCalc =< 4)then RankList.Value = "2 Stars"
+if (UserProperties("Complexity") > 0.1 and UserProperties("Complexity") =< 6 and ErrorStarCalc > 4)then RankList.Value = "1 Star"
+
+if (UserProperties("Complexity") > 6 and UserProperties("Complexity") =< 12 and ErrorStarCalc > 0 and ErrorStarCalc =< 2)then RankList.Value = "4 Stars"
+if (UserProperties("Complexity") > 6 and UserProperties("Complexity") =< 12 and ErrorStarCalc > 2 and ErrorStarCalc =< 4)then RankList.Value = "3 Stars"
+if (UserProperties("Complexity") > 6 and UserProperties("Complexity") =< 12 and ErrorStarCalc > 4 and ErrorStarCalc =< 7)then RankList.Value = "2 Stars"
+if (UserProperties("Complexity") > 6 and UserProperties("Complexity") =< 12 and ErrorStarCalc > 7)then RankList.Value = "1 Star"
+
+if C>0 then RankList.Value = "1 Star"
+
+if (UserProperties("Complexity") > 12)then RankList.Value = "Out of Scope"
+if (UserProperties("Complexity") < .5)then RankList.Value = "Out of Scope"
+
+End Sub
+
+Sub CommandButton2_Click()
+
+Set objPage = Item.GetInspector.ModifiedFormPages("Planner")
+Set Result = objPage.Controls("OCalcText")
+
+OverheadCalc = 0
+APDesignTemp = 0
+APDesign = 0
+APLayoutTemp = 0
+APLayout = 0
+CAGTemp = 0
+CAG = 0
+PDFConvertTemp = 0 
+PDFConvert = 0 
+DirtyPDF = 0
+Template = 0
+
+
+'--- AP Design - This Section OK
+APDesignTemp = UserProperties("RFMetric-APDesign")/12
+If (APDesignTemp > 0 and APDesignTemp =< 1) then APDesign = 1
+If (APDesignTemp > 1) then APDesign = Int(APDesignTemp)+1
+If (APDesignTemp-Int(APDesignTemp) = 0) then APDesign = APDesignTemp
+'---
+
+
+'--- AP Layout - 
+APLayoutTemp = UserProperties("RFMetric-APLayout")/24
+If (APLayoutTemp > 0 and APLayoutTemp =< 1) then APLayout = .5
+If APLayoutTemp > 1 then APLayout = ((Int(APLayoutTemp)+1)/2)
+If (Int(APLayoutTemp) - APLayoutTemp = 0) then APLayout = APLayoutTemp/2
+If APLayoutTemp = 0 then APLayout = 0
+'---
+
+
+'--- CAG
+CAGTemp = UserProperties("RFMetric-CAG")/10
+If (CAGTemp > 0 and CAGTemp =< 1) then CAG = .5
+If CAGTemp > 1 then CAG = ((Int(CAGTemp)+1)/2)
+If (Int(CAGTemp) - CAGTemp = 0) then CAG = CAGTemp/2
+If CAGTemp = 0 then CAG = 0
+'---
+
+
+
+PDFConvertTemp = UserProperties("RFMetric-PDFConvert")/10
+If (PDFConvertTemp > 0 and PDFConvertTemp =< 1) then PDFConvert = .25
+If (PDFConvertTemp > 1 and PDFConvertTemp =< 2) then PDFConvert = .5
+If (PDFConvertTemp > 2 and PDFConvertTemp =< 3) then PDFConvert = .75
+If (PDFConvertTemp > 3 and PDFConvertTemp =< 4) then PDFConvert = 1
+
+
+
+If UserProperties("RFMetric-DirtyPDFYesNo") = "Yes" then DirtyPDF = (.25 * UserProperties("RFMetric-PDFConvert"))
+
+Template = .25*(UserProperties("RFMetric-TemplateSetup"))
+
+OverheadCalc = APDesign + APLayout + CAG + PDFConvert + DirtyPDF + Template
+
+msgbox "AP Design: " & APDesign & vbnewline & "AP Layout: " & APLayout & vbnewline & "CAG: " & CAG & vbnewline & "PDF -> DWG: " & PDFConvert & vbnewline & "Dirty PDFs: " & DirtyPDF & vbnewline & "Template Setup: " & Template  
+
+Result.Caption = OverheadCalc 
+
+
+End Sub
+
+
+
+'Distribution Email
+'----------------------------------
+Sub Email_Click()
+Set MyApp = CreateObject("Outlook.Application")
+Set MyItem = MyApp.CreateItem(0)'olMailItem
+
+
+With MyItem
+.display
+.Subject = "Completed Drawing: " & UserProperties("MOC Number:") & " - Request# " & Item.Subject
+.ReadReceiptRequested = False
+
+strHTMLBody ="Hello, " & "<BR><BR> Attached is the completed drawing for " & UserProperties("MOC Number:") & " - Request #" & Item.Subject & "." & " Please let me know if you have any questions and/or concerns.<BR>"
+
+.HTMLBody = "<p style='font-family:calibri;font-size:16'>" & strHTMLBody & .HTMLBody
+End With
+
+'MyItem.Display
+
+End Sub
+
+
+
+
+'Open Shared Folder
+'------------------------
+Sub Shared_Click()
+Set objWeb = CreateObject("InternetExplorer.Application")
+Set objPage = Item.GetInspector.ModifiedFormPages("Planner")
+
+
+SharedFolderName = "OWNERNAMEHERE"
+
+
+'------------------------------
+'Read users and Shared Folder path from "O:\Departmental\_Tools and Processes\Plan_Check_Forms\PCMSUsers.txt"
+'------------------------------
+
+Set objfsoc = CreateObject("Scripting.FileSystemObject") 
+Set UserFile= objfsoc.OpenTextFile("O:\Departmental\_Tools and Processes\Plan_Check_Forms\PCMSUsers.txt") 
+
+SharedFlagFound = 0
+do while ((not userfile.AtEndOfStream) AND (SharedFlagFound<1))
+  ReadVariable = UserFile.ReadLine()
+  If InStr(ReadVariable, UserProperties("Owner")) then 
+  	SharedFolderName = Userfile.Readline()
+	SharedFolderName = SharedFolderName & UserProperties("Subject")
+      msgbox "ReadVariable: " & ReadVariable & "  SharedFolderName: " & SharedFolderName
+      objWeb.Navigate(SharedFolderName)
+  	SharedFlagFound = 1 
+  end if
+loop	
+
+set objFSOC = CreateObject("Scripting.FileSystemObject")
+folderC= SharedFolderName
+if not objFSOC.FolderExists (folderC) then 
+   msgbox "Project Folder path incorrect! Opening C:Projects_PCCI instead."
+ end if
+
+
+
+
+End Sub
+
+
+
+
+
+
+    
