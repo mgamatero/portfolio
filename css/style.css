@@ -282,6 +282,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6b4da8', end
 	padding: 4%;
 	text-align: left
 }
+
+#education_li h6{
+	color:#fff;
+}
+
 .chart {
 	position: relative;
 	display: inline-block;
