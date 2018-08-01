@@ -141,12 +141,14 @@ hr {
 }
 .navbar-custom .nav li a:hover {
 	outline: 0;
-	color: #444;
+	color: rgb(243, 236, 236);
 	background-color: transparent;
+	
 }
 .navbar-custom .nav li a:focus, .navbar-custom .nav li a:active {
 	outline: 0;
 	background-color: transparent;
+	
 	color: #fff;
 }
 .navbar-custom .nav li.active {
@@ -434,7 +436,7 @@ ol.type li a:hover {
 	color: #E87E04;
 }
 /* Achivements Section */
-#achievements {
+#credentials {
 	padding: 100px 0;
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#6b4da8+0,4977c2+100 */
 	background: #333; /* Old browsers */
@@ -443,10 +445,10 @@ ol.type li a:hover {
 	background: linear-gradient(to #333 0%, #777 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333', endColorstr='#777', GradientType=1 ); /* IE6-9 */
 }
-#achievements h2 {
+#credentials h2 {
 	color: #fff;
 }
-#achievements hr {
+#credentials hr {
 	background: rgba(255,255,255,0.3);
 }
 .achievement-box h4 {
