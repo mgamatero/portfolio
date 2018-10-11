@@ -249,6 +249,10 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:acti
 #about-me-icons{
 	max-width:50%;
 }
+
+#about-title{
+	padding-bottom:1px;
+}
 /* Skills Section */
 #skills {
 	padding: 50px 0;
@@ -529,7 +533,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333', endCol
 	background: rgba(255,255,255,0.3);
 }
 #contact h3 {
-	padding-top: 20px;
+	padding-top: 40px;
 	font-size: 20px;
 	font-weight: 400;
 	color: #fff;
@@ -591,7 +595,7 @@ color: #2c3e50;
 	margin-top: 20px;
 }
 #contact .social {
-	margin-top: 80px;
+	margin-top: 40px;
 }
 #contact .social ul li {
 	display: inline-block;
