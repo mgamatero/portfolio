@@ -245,6 +245,10 @@ a:focus, .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:acti
 	margin-top: 20px;
 	margin-bottom: 30px;
 }
+
+#about-me-icons{
+	max-width:50%;
+}
 /* Skills Section */
 #skills {
 	padding: 50px 0;
