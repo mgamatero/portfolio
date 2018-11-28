@@ -443,6 +443,13 @@ ol.type li a:hover {
 .hover-bg:hover .hover-text {
 	opacity: 1;
 }
+
+.links {
+	text-decoration:underline;
+	color: rgb(40, 40, 240);
+	font-weight: bold
+}
+
 #portfolio i.fa {
 	font-size: 20px;
 	padding: 5px;
